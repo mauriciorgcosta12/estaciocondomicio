@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import ttk
+
+class Pessoa:
+    def __init__(self, nome, apartamento, profissao):
+        self.nome = nome
+        self.apartamento = apartamento
+        self.profissao = profissao
+
+    def __str__(self):
+        return f"Nome: {self.nome}, Apartamento: {self.apartamento}, Profissão: {self.profissao}"
+
+
+class Condominio:
+    def __init__(self):
+        self.moradores = []
+
+    def adicionar_morador(self, nome, apartamento, profissao):
+        novo_morador = Pessoa(nome, apartamento, profissao)
+        self.moradores.append(novo_morador)
+
+    def listar_moradores(self):
+        return self.moradores
+
+
+class App:
+    def __init__(self, root):
+        self.condominio = Condominio()
+
+        self.root = root
+        self.root.title("Cadastro de Moradores")
+
+        self.nome_label = tk.Label(root, text="Nome:")
+        self.nome_label.grid(row=0, column=0)
+        self.nome_entry = tk.Entry(root)
+        self.nome_entry.grid(row=0, column=1)
+
+        self.apartamento_label = tk.Label(root, text="Apartamento:")
+        self.apartamento_label.grid(row=1, column=0)
+        self.apartamento_entry = tk.Entry(root)
+        self.apartamento_entry.grid(row=1, column=1)
+
+        self.profissao_label = tk.Label(root, text="Profissão:")
+        self.profissao_label.grid(row=2, column=0)
+        self.profissao_entry = tk.Entry(root)
+        self.profissao_entry.grid(row=2, column=1)
+
+        self.add_button = tk.Button(root, text="Adicionar", command=self.adicionar_morador)
+        self.add_button.grid(row=3, column=0, columnspan=2)
+
+        self.tree = ttk.Treeview(root, columns=("Nome", "Apartamento", "Profissão"), show="headings")
+        self.tree.heading("Nome", text="Nome")
+        self.tree.heading("Apartamento", text="Apartamento")
+        self.tree.heading("Profissão", text="Profissão")
+        self.tree.grid(row=4, column=0, columnspan=2)
+
+    def adicionar_morador(self):
+        nome = self.nome_entry.get()
+        apartamento = self.apartamento_entry.get()
+        profissao = self.profissao_entry.get()
+
+        self.condominio.adicionar_morador(nome, apartamento, profissao)
+
+        self.tree.insert("", "end", values=(nome, apartamento, profissao))
+
+        self.nome_entry.delete(0, tk.END)
+        self.apartamento_entry.delete(0, tk.END)
+        self.profissao_entry.delete(0, tk.END)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = App(root)
+    root.mainloop()
